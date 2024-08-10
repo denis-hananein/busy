@@ -17,7 +17,7 @@ impl DateTimeInterval {
 
 pub fn parse_datetime(datetime: &str) -> ParseResult<chrono::DateTime<chrono::Local>> {
   let mut input = datetime.to_owned();
-  if !input.contains(" ") {
+  if !input.contains(' ') {
     input = format!("{} {}", chrono::Local::now().format("%Y-%m-%d"), input);
   }
   return chrono::Local.datetime_from_str(&input, "%Y-%m-%d %H:%M");

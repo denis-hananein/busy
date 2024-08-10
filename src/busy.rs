@@ -1,5 +1,3 @@
-use log::debug;
-
 use crate::{
   duration::Period,
   project::Project,
@@ -22,7 +20,7 @@ impl Busy {
   pub fn new() -> Self {
     let config = Config::new();
 
-    debug!("busy data folder: {}", config.storage_dir_path);
+    log::debug!("busy data folder: {}", config.storage_dir_path);
     std::fs::create_dir_all(&config.storage_dir_path).unwrap();
 
     let syncer: Box<dyn Syncer> = match config.syncer.clone() {
@@ -70,8 +68,8 @@ impl Busy {
   }
 
   pub fn upsert_tags(&mut self, tags: Vec<String>) -> Vec<uuid::Uuid> {
-    let mut pushed_ids = Vec::new();
-    for tag in tags.iter() {
+    let mut pushed_ids = Vec::with_capacity(tags.len());
+    for tag in &tags {
       match self.storage.find_tag_by_name(tag) {
         Some(found_tag) => {
           pushed_ids.push(found_tag.id().clone());
@@ -198,7 +196,7 @@ impl Busy {
 
     let maybe_task_to_continue = self.task_by_id(task_id);
     if maybe_task_to_continue.is_none() {
-      return Err(format!("task with id: {} not found", task_id));
+      return Err(format!("task with id: {task_id} not found"));
     }
     let existing_task = maybe_task_to_continue.unwrap();
     let new_task = Task::new(
@@ -358,7 +356,7 @@ impl Busy {
 
   fn commit(&mut self, msg: &str) {
     match self.syncer.commit(msg) {
-      Err(err) => println!("commit err: {} msg: {}", err, msg),
+      Err(err) => println!("commit err: {err} msg: {msg}"),
       _ => {}
     };
   }
@@ -366,8 +364,7 @@ impl Busy {
 
 fn format_task_commit(prefix: &str, task: &Task) -> String {
   format!(
-    "{} task title: {} id: {} project: {}",
-    prefix,
+    "{prefix} task title: {} id: {} project: {}",
     task.title(),
     task.id(),
     task.project_id()

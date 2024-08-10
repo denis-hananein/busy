@@ -1,7 +1,5 @@
 use std::io::{Seek, Write};
 
-use log::debug;
-
 use crate::{project::Project, tag::Tag, task::Task, traits::Indexable};
 
 use super::storage::Storage;
@@ -180,7 +178,7 @@ where
 
     storage_item.restore();
 
-    debug!(
+    log::debug!(
       "restored {} items from: {}",
       storage_item.buffer.len(),
       filepath

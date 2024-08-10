@@ -1,5 +1,3 @@
-use log::debug;
-
 use super::syncer::Syncer;
 
 pub struct GitSyncer {
@@ -16,11 +14,13 @@ impl GitSyncer {
     remote: Option<String>,
     branch: Option<String>,
   ) -> Self {
+    const DEFAULT_BRANCH: &str = "main";
+
     let mut obj = Self {
       main_folder_path: main_folder_path.to_owned(),
       key_file,
       remote,
-      branch: branch.unwrap_or("main".to_owned()),
+      branch: branch.unwrap_or(DEFAULT_BRANCH.to_owned()),
     };
     _ = obj.init();
     return obj;
@@ -114,7 +114,7 @@ impl Syncer for GitSyncer {
 }
 
 fn git_with_args(cwd: &str, key_file: Option<&String>, args: &[&str]) -> std::io::Result<String> {
-  debug!("run git with args: {args:?} cwd: {cwd} key_file: {key_file:?}");
+  log::debug!("run git with args: {args:?} cwd: {cwd} key_file: {key_file:?}");
 
   let mut command = std::process::Command::new("git");
   command.current_dir(cwd);
@@ -125,11 +125,11 @@ fn git_with_args(cwd: &str, key_file: Option<&String>, args: &[&str]) -> std::io
 
   let stdout = String::from_utf8(output.stdout.clone()).unwrap_or_default();
   if !output.status.success() {
-    debug!("git with err: {} status: {}", stdout, output.status);
+    log::debug!("git with err: {} status: {}", stdout, output.status);
     return Err(std::io::Error::new(std::io::ErrorKind::Other, stdout));
   }
 
-  debug!("git with output: {:?} status: {}", stdout, output.status);
+  log::debug!("git with output: {:?} status: {}", stdout, output.status);
 
   return Ok(stdout);
 }
