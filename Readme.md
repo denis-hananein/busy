@@ -42,19 +42,19 @@ There are four ways to create a new task:
 - start task right now:
 
 ```
-busy start my-project "Task description" +tag1 +tag2 +tag3
+busy start my-project "Task description" tag1 tag2 tag3
 ```
 
 - start task with start point:
 
 ```
-busy start --start-time "11:05" my-project "Task description" +tag1 +tag2 +tag3
+busy start --start-time "11:05" my-project "Task description" tag1 tag2 tag3
 ```
 
 - add finished task:
 
 ```
-busy add --start-time "11:05" --finish-time "12:00" my-project "Task description" +tag1 +tag2 +tag3
+busy add --start-time "11:05" --finish-time "12:00" my-project "Task description" tag1 tag2 tag3
 ```
 
 - continue existing task (create a new one with start-time == now):
