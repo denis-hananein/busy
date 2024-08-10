@@ -10,7 +10,7 @@ Busy implements sync through git repository. Check [sync](#sync) section for det
 ## Installation
 
 ```
-cargo install --git https://github.com/zloylos/busy.git
+cargo install --git https://github.com/denis-hananein/busy.git
 ```
 
 ## Configuration
